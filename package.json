@@ -1,0 +1,28 @@
+{
+  "name": "AuthService",
+  "version": "1.0.0",
+  "description": "Auth service for quickread backend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IvanB475/AuthService.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IvanB475/AuthService/issues"
+  },
+  "homepage": "https://github.com/IvanB475/AuthService#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.5"
+  }
+}
