@@ -39,9 +39,11 @@ userSchema.methods.toJSON = function () {
   return userObject;
 };
 
-userSchema.methods.generateToken = function () {
+userSchema.methods.generateToken = async function () {
   const tokenSecret = process.env.TOKEN_SECRET;
-  const token = jwt.sign({ id: this._id }, tokenSecret, { expiresIn: "1h" });
+  const token = await jwt.sign({ id: this._id }, tokenSecret, {
+    expiresIn: "1h",
+  });
 
   return token;
 };
