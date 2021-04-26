@@ -13,7 +13,9 @@ exports.signUp = async (req, res, next) => {
     });
 
     const savedUser = await user.save();
+    console.log(savedUser);
     const token = savedUser.generateToken();
+    console.log(token);
     res.setHeader("Authorization", token);
     res.status(201).json({ message: "You have been registered" });
   } catch (e) {
