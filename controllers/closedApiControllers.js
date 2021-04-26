@@ -2,7 +2,6 @@ const validateTokenFunc = require("../utils/validateToken");
 
 exports.validateToken = async (req, res, next) => {
   const token = req.header("Authorization");
-  console.log(token);
   const validated = await validateTokenFunc.validateToken(token);
   if (validated) {
     console.log("validated" + validated);
