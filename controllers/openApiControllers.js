@@ -13,7 +13,6 @@ exports.signUp = async (req, res, next) => {
     });
 
     const savedUser = await user.save();
-    console.log(savedUser);
     const token = await savedUser.generateToken();
     console.log(token);
     res.setHeader("Authorization", token);
@@ -28,7 +27,7 @@ exports.login = async (req, res, next) => {
 
   try {
     const user = await User.findByLogin(username.toLowerCase(), password);
-    const token = user.generateToken();
+    const token = await user.generateToken();
     res.setHeader("Authorization", token);
     res.status(200).json({ message: "you've been logged in" });
   } catch (e) {
