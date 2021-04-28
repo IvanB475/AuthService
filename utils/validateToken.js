@@ -4,7 +4,7 @@ exports.validateToken = async (token) => {
   try {
     const tokenSecret = process.env.TOKEN_SECRET;
     const validationResult = jwt.verify(token, tokenSecret);
-    return true;
+    return validationResult;
   } catch (e) {
     return false;
   }

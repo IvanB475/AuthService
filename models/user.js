@@ -13,28 +13,18 @@ const userSchema = new Schema({
   },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  preferences: [
-    {
-      _id: false,
-      idSource: { type: String },
-      category: [
-        {
-          _id: false,
-          name: { type: String },
-          href: { type: String },
-          path: { type: String },
-        },
-      ],
-    },
-  ],
+  preferedCategories: [{ type: String, trim: true }],
+  preferedSources: [{ type: String, trim: true }],
+  resetToken: { type: String, trim: true },
+  resetTokenExpiration: { type: Date },
 });
 
 userSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
-  delete userObject.preferences;
   delete userObject.__v;
   delete userObject.password;
+  delete userObject._id;
 
   return userObject;
 };

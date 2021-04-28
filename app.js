@@ -16,6 +16,7 @@ app.use(helmet());
 
 mongoose.connect("mongodb://localhost:27017/QuickreadAuthService", {
   useNewUrlParser: true,
+  useFindAndModify: false,
   useUnifiedTopology: true,
 });
 
