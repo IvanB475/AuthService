@@ -14,4 +14,6 @@ router
   .put("/changePassword", openApiControllers.changePassword)
   .put("/updateSettings", openApiControllers.updateSettings);
 
+router.delete("/deleteUser", openApiControllers.deleteUser);
+
 module.exports = router;

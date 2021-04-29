@@ -42,13 +42,9 @@ exports.getSettings = async (req, res, next) => {
   const token = req.header("Authorization");
   try {
     const result = await validateToken(token);
-    if (!result) {
-      res.status(403).json({ message: "not authorized" });
-    } else {
-      const userId = result.id;
-      const user = await User.findById(userId);
-      res.status(200).json({ user });
-    }
+    const userId = result.id;
+    const user = await User.findById(userId);
+    res.status(200).json({ user });
   } catch (e) {
     res.status(400).json({ message: "something went wrong" });
   }
@@ -59,17 +55,13 @@ exports.changePassword = async (req, res, next) => {
   const { newPassword, confirmPassword } = req.body;
   try {
     const result = await validateToken(token);
-    if (!result) {
-      res.status(403).json({ message: "not authorized" });
+    if (newPassword !== confirmPassword) {
+      res.status(400).json({ message: "passwords do not match" });
     } else {
-      if (newPassword !== confirmPassword) {
-        res.status(400).json({ message: "passwords do not match" });
-      } else {
-        const userId = result.id;
-        const newUserPassword = await bcrypt.hash(newPassword, 12);
-        await User.findByIdAndUpdate(userId, { password: newUserPassword });
-        res.status(201).json({ message: "password changed successfully" });
-      }
+      const userId = result.id;
+      const newUserPassword = await bcrypt.hash(newPassword, 12);
+      await User.findByIdAndUpdate(userId, { password: newUserPassword });
+      res.status(201).json({ message: "password changed successfully" });
     }
   } catch (e) {
     res.status(400).json({ message: "password couldn't be changed" });
@@ -84,17 +76,13 @@ exports.updateSettings = async (req, res, next) => {
 
   try {
     const result = await validateToken(token);
-    if (!result) {
-      res.status(403).json({ message: "not authorized" });
-    } else {
-      const userId = result.id;
-      const user = await User.findById(userId);
-      user.email = email || user.email;
-      if (preferedCategories) user.preferedCategories.push(preferedCategories);
-      if (preferedSources) user.preferedSources.push(preferedSources);
-      await user.save();
-      res.status(201).json({ message: "updated profile successfully" });
-    }
+    const userId = result.id;
+    const user = await User.findById(userId);
+    user.email = email || user.email;
+    if (preferedCategories) user.preferedCategories.push(preferedCategories);
+    if (preferedSources) user.preferedSources.push(preferedSources);
+    await user.save();
+    res.status(201).json({ message: "updated profile successfully" });
   } catch (e) {
     res.status(400).json({ message: "something went wrong" });
   }
@@ -140,6 +128,18 @@ exports.validateResetToken = async (req, res, next) => {
       res.setHeader("Authorization", authToken);
       res.status(200).json({ message: "OK" });
     }
+  } catch (e) {
+    res.status(400).json({ message: "something went wrong" });
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  const token = req.header("Authorization");
+  try {
+    const result = await validateToken(token);
+    const userId = result.id;
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "account was deleted" });
   } catch (e) {
     res.status(400).json({ message: "something went wrong" });
   }

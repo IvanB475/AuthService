@@ -6,6 +6,6 @@ exports.validateToken = async (token) => {
     const validationResult = jwt.verify(token, tokenSecret);
     return validationResult;
   } catch (e) {
-    return false;
+    throw new Error(e);
   }
 };
