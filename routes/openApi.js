@@ -6,7 +6,7 @@ router.get("/settings", openApiControllers.getSettings);
 
 router
   .post("/signUp", openApiControllers.signUp)
-  .post("/forgotPassword", openApiControllers.forgotPassword)
+  .post("/forgotPassword", openApiControllers.forgotPasswordOnAws)
   .post("/validateResetToken", openApiControllers.validateResetToken)
   .post("/login", openApiControllers.login);
 

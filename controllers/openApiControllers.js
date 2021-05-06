@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const { validateToken } = require("../utils/validateToken");
 const { generateForgotPwToken } = require("../utils/generateRandomToken");
-const { sendMail } = require("../utils/sendMail");
+const { sendMail, sendMailViaApi } = require("../utils/sendMail");
 
 exports.signUp = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -110,6 +110,27 @@ exports.forgotPassword = async (req, res, next) => {
       res.status(200).json({
         message: "mail was sent to your email, please check your inbox",
       });
+    } catch (e) {
+      res.status(400).json({ message: "something went wrong" });
+    }
+  }
+};
+
+exports.forgotPasswordOnAws = async (req, res, next) => {
+  const email = req.body?.email;
+  const secret = process.env.API_SECRET;
+  if (!email) {
+    res.status(400).json({ message: "input your email" });
+  } else {
+    try {
+      const token = await generateForgotPwToken(10);
+      console.log(token);
+      const user = await User.findOne({ email });
+      user.resetToken = token;
+      user.resetTokenExpiration = Date.now() + 3600000;
+      user.save();
+      const mail = await sendMailViaApi(email, token, secret);
+      res.status(200).json({ message: "OK" });
     } catch (e) {
       res.status(400).json({ message: "something went wrong" });
     }
